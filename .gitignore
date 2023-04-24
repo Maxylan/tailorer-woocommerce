@@ -1,0 +1,4 @@
+.env
+dockerfiles/wp/*
+!.gitinclude
+!wp-config-sample.php

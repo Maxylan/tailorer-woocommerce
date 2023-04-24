@@ -1,0 +1,43 @@
+# Write a db service using mariadb:jammy
+services:
+  tailorer.db:
+    image: mariadb:jammy
+    restart: unless_stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - tailorer
+  tailorer.wp:
+    build: # From ./dockerfiles/Dockerfile
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile
+    restart: unless_stopped
+    environment:
+      WORDPRESS_DB_HOST: "${DB_HOST}"
+      WORDPRESS_DB_NAME: "${DB_NAME}"
+      WORDPRESS_DB_USER: "${DB_USER}"
+      WORDPRESS_DB_PASSWORD: "${DB_PASSWORD}"
+      WP_AUTH_KEY: "${AUTH_KEY}"
+      WP_AUTH_SALT: "${AUTH_SALT}"
+      WP_SECURE_AUTH_KEY: "${SECURE_AUTH_KEY}"
+      WP_SECURE_AUTH_SALT: "${SECURE_AUTH_SALT}"
+      WP_LOGGED_IN_KEY: "${LOGGED_IN_KEY}"
+      WP_LOGGED_IN_SALT: "${LOGGED_IN_SALT}"
+      WP_NONCE_KEY: "${NONCE_KEY}"
+      WP_NONCE_SALT: "${NONCE_SALT}"
+    volumes:
+      - wp_data:/var/www/html
+    ports:
+      - 8080:80
+    networks:
+      - tailorer
+networks:
+  tailorer:
+    driver: bridge
