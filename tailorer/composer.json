@@ -3,14 +3,14 @@
         "psr-4": {
             "Tailorer\\": "includes",
             "Tailorer\\Library\\": "includes/lib",
-            "Tailorer\\Library\\Services": "includes/lib/services",
-            "Tailorer\\Library\\Products": "includes/lib/products",
-            "Tailorer\\Library\\Public": "includes/lib/public",
-            "Tailorer\\Library\\Admin": "includes/lib/admin",
-            "Tailorer\\Library\\Admin\\Forms": "includes/lib/admin/forms",
-            "Tailorer\\Library\\Options": "includes/lib/options",
-            "Tailorer\\Library\\Views": "includes/lib/views",
-            "Tailorer\\Library\\Views\\Partials": "includes/lib/views/partials",
+            "Tailorer\\Library\\Services\\": "includes/lib/services",
+            "Tailorer\\Library\\Products\\": "includes/lib/products",
+            "Tailorer\\Library\\Public\\": "includes/lib/public",
+            "Tailorer\\Library\\Admin\\": "includes/lib/admin",
+            "Tailorer\\Library\\Admin\\Forms\\": "includes/lib/admin/forms",
+            "Tailorer\\Library\\Options\\": "includes/lib/options",
+            "Tailorer\\Library\\Views\\": "includes/lib/views",
+            "Tailorer\\Library\\Views\\Partials\\": "includes/lib/views/partials",
             "Tailorer\\Assets\\": "includes/assets"
         }
     }
