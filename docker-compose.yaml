@@ -19,6 +19,7 @@ services:
       context: .
       dockerfile: ./dockerfiles/Dockerfile
     restart: unless_stopped
+    command: ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
     environment:
       WORDPRESS_DB_HOST: "${DB_HOST}"
       WORDPRESS_DB_NAME: "${DB_NAME}"
@@ -33,11 +34,16 @@ services:
       WP_NONCE_KEY: "${NONCE_KEY}"
       WP_NONCE_SALT: "${NONCE_SALT}"
     volumes:
-      - wp_data:/var/www/html
+      - wp_data:/var/www/wp
+      - ./tailorer:/var/www/wp/wp-content/plugins/tailorer
     ports:
-      - 8080:80
+      - 80:80
+      - 443:443
     networks:
       - tailorer
 networks:
   tailorer:
     driver: bridge
+volumes:
+  db_data:
+  wp_data:

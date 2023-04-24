@@ -36,6 +36,7 @@ RUN apt clean
 RUN apt-get clean
 RUN apt-get update
 
+# Generate self-signed certificate
 RUN openssl  req -x509 -new -out tailorer-self-signed.crt -keyout tailorer-self-signed.key -days 365 -newkey rsa:4096 -sha256 -nodes << END_SESSION \
 '' \
 '' \
@@ -43,7 +44,11 @@ RUN openssl  req -x509 -new -out tailorer-self-signed.crt -keyout tailorer-self-
 '' \
 '' \
 'dev.tailorer.se' \
-''
+'' \
+END_SESSION
+
+# Copy wp
+COPY ./dockerfiles/wp /var/www/wp
 
 # Configure Apache2 / httpd
 RUN /usr/sbin/a2enmod rewrite && /usr/sbin/a2enmod headers && /usr/sbin/a2enmod ssl && /usr/sbin/a2enmod expires
@@ -73,5 +78,3 @@ RUN apt-get update && apt-get install -y \
 
 EXPOSE 80:80
 EXPOSE 443:443
-
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

@@ -89,6 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', ABSPATH.'wp-content/plugins/tailorer/debug.log' );
+define( 'WP_DEBUG_DISPLAY', false );
 
 /* That's all, stop editing! Happy publishing. */
 
