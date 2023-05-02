@@ -12,6 +12,7 @@
 
 namespace Tailorer;
 
+use Tailorer\Library\Registrators;
 
 /**
  * The core plugin class.
@@ -113,7 +114,7 @@ final class Core
      */
     public static function register_hooks(): void
     {
-        // Registrators\Hooks::register_hooks();
+        Registrators\Hooks::register_hooks();
         // Roles\Hooks::register_hooks();
         // Users\Hooks::register_hooks();
         // Routes\Hooks::register_hooks();
