@@ -48,12 +48,15 @@ register_activation_hook( __FILE__, [\Tailorer\Core::class, 'activate'] );
 register_deactivation_hook( __FILE__, [\Tailorer\Core::class, 'deactivate'] );
 
 // Register "tailorer" text-domain. (Needs to be done from a script in the plugin root)
-add_action( 'plugins_loaded', function () { // If loading domain is not successfull, log it if the plugin is in dev-mode.
-    if ( !is_textdomain_loaded('tailorer') && !load_plugin_textdomain( 'tailorer', false, '/'.TAILORER_NAME.'/lang' ) && TAILORER_DEBUG ) {
-        error_log(ucfirst(TAILORER_NAME).' could not load custom text domain! Translations will be missing! Check if the path to /lang/ is correct, it needs to be relative to WP_PLUGIN_DIR ('.WP_PLUGIN_DIR.')');
+add_action( 'plugins_loaded', function () { 
+    if (!is_textdomain_loaded('tailorer') && 
+        !load_plugin_textdomain( 'tailorer', false, '/'.TAILORER_NAME.'/lang' ) && (
+            defined('TAILORER_DEBUG') && TAILORER_DEBUG 
+        )) 
+    {   // If loading domain is not successfull, log it if the plugin is in debug-mode.
+        // error_log(ucfirst(TAILORER_NAME).' could not load custom text domain! Translations will be missing! Check if the path to /lang/ is correct, it needs to be relative to WP_PLUGIN_DIR ('.WP_PLUGIN_DIR.')');
     }
 });
-
 
 
 /**

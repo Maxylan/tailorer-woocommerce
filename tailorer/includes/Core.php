@@ -1,16 +1,13 @@
 <?php
 
 /**
- * The file that defines the core plugin class
+ * The core plugin namespace.
  *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
+ * @link       https://github.com/Maxylan
+ * @since      1.0-alpha
  *
- * @link       https://newseed.se
- * @since      1.0.0
- *
- * @package    Digiteket
- * @subpackage Digiteket/classes
+ * @package    Tailorer
+ * @subpackage Tailorer/classes
  */
 
 namespace Tailorer;
@@ -23,13 +20,13 @@ namespace Tailorer;
  * functions available throughout the plugin are defined, effectively 
  * starting execution.
  *
- * @since      1.0.0
- * @package    Digiteket
+ * @since      1.0-alpha
+ * @package    Tailorer
  * @author     Maxylan (Max Olsson)
  */
 final class Core
 {
-    /** Prevent instances of this from being created. @since 1.0.0 */
+    /** Prevent instances of this from being created. */
     private function __construct()
     {
     }
@@ -38,21 +35,26 @@ final class Core
      * Starts execution of the plugin!
      * 
      * @return  void
-     * @since   1.0.0
      */
     public static function run(): void
     {
-        self::register_routes();
-        self::register_taxonomies();
-        self::register_post_types();
-        self::register_hooks();
+        if (self::is_wc_active()) {
+            // WooCommerce enabled
+            self::register_routes();
+            self::register_taxonomies();
+            self::register_post_types();
+            self::register_hooks();
+        }
+        else {
+            // WooCommerce disabled
+            MissingWoo::run();
+        }
     }
 
     /**
      * Registers all routes.
      * 
      * @return  void
-     * @since   1.0.0
      */
     public static function register_routes(): void
     {
@@ -73,7 +75,6 @@ final class Core
      * hooks that are highly specific to the taxonomy.
      * 
      * @return  void
-     * @since   1.0.0
      */
     public static function register_taxonomies(): void
     {
@@ -94,7 +95,6 @@ final class Core
      * hooks that are highly specific to the cpt.
      * 
      * @return  void
-     * @since   1.0.0
      */
     public static function register_post_types(): void
     {
@@ -110,7 +110,6 @@ final class Core
      * Registers all action/filter hooks.
      * 
      * @return  void
-     * @since   1.0.0
      */
     public static function register_hooks(): void
     {
@@ -125,7 +124,6 @@ final class Core
      * Fires when the plugin is first activated.
      * 
      * @return  void
-     * @since   1.0.0
      */
     public static function activate(): void {
     }
@@ -134,7 +132,6 @@ final class Core
      * Fires when the plugin is first deactivated.
      * 
      * @return  void
-     * @since   1.0.0
      */
     public static function deactivate(): void {
         
@@ -146,7 +143,6 @@ final class Core
      * it will always be active, this plugin will not run without it.
      * 
      * @return  void
-     * @since   1.0.0
      */
     public static function is_wc_active(): bool {
         return defined('WC_ACTIVE') && WC_ACTIVE;
@@ -156,36 +152,37 @@ final class Core
      * Asserts if debugging is enabled.
      * 
      * @return  bool
-     * @since   1.0.0
      */
     public static function debug(): bool {
         return WP_DEBUG && defined('TAILORER_DEBUG') && TAILORER_DEBUG;
     }
 
     /**
-     * Asserts if debugging is enabled.
+     * Logs a value to the error log if debugging is enabled.
      * 
+     * @see     \Tailorer\Core::debug()
      * @return  void
-     * @since   1.0.0
      */
-    public static function debug_log($value, bool $var_dump = false): void 
+    public static function log($value, bool $var_dump = false): void 
     {
         if (!self::debug()) {
             return;
         }
 
+        $debug_log_prefix = __('- Tailorer:', 'tailorer').' ';
+
         if ($var_dump) {
             ob_start();
             var_dump($value);
             $value = ob_get_clean();
-            error_log($value);
+            error_log($debug_log_prefix . $value);
         }
         else if (!empty($value)) {
             if (is_array($value) || is_object($value)) {
-                error_log(print_r($value, true));
+                error_log($debug_log_prefix . print_r($value, true));
             }
             else {
-                error_log($value);
+                error_log($debug_log_prefix . $value);
             }
         }
     }

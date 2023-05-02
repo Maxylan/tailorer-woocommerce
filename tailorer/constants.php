@@ -2,8 +2,9 @@
 /**
  * Defines constants used throughout the plugin.
  *
- * @author            Maxylan (Max Olsson)
- * @link              https://github.com/Maxylan
+ * @author      Maxylan (Max Olsson)
+ * @link        https://github.com/Maxylan
+ * @since      	1.0-alpha
  */
 
 // If this file is called directly, abort.
