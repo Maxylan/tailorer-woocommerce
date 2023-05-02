@@ -33,14 +33,19 @@ define( 'TAILORER_VERSION', '1.0-alpha' );
 require_once 'constants.php';
 
 /**
+ * For autoloading of files.
+ */
+require_once 'vendor/autoload.php';
+
+/**
  * The code that runs during plugin activation.
  */
-register_activation_hook( __FILE__, [Tailorer\Core::class, 'activate'] );
+register_activation_hook( __FILE__, [\Tailorer\Core::class, 'activate'] );
 
 /**
  * The code that runs during plugin deactivation.
  */
-register_deactivation_hook( __FILE__, [Tailorer\Core::class, 'deactivate'] );
+register_deactivation_hook( __FILE__, [\Tailorer\Core::class, 'deactivate'] );
 
 // Register "tailorer" text-domain. (Needs to be done from a script in the plugin root)
 add_action( 'plugins_loaded', function () { // If loading domain is not successfull, log it if the plugin is in dev-mode.
@@ -50,7 +55,8 @@ add_action( 'plugins_loaded', function () { // If loading domain is not successf
 });
 
 
+
 /**
  * Start Tailorer.
  */
-Tailorer\Core::run();
+\Tailorer\Core::run();

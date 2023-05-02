@@ -1,7 +1,7 @@
 {    
     "autoload": {
         "psr-4": {
-            "Tailorer\\": "includes",
+            "Tailorer\\": "includes/",
             "Tailorer\\Library\\": "includes/lib",
             "Tailorer\\Library\\Services\\": "includes/lib/services",
             "Tailorer\\Library\\Products\\": "includes/lib/products",
