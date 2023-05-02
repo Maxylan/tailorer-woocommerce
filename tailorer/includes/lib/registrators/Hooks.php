@@ -5,7 +5,7 @@ namespace Tailorer\Library\Registrators;
 /**
  * Defines all action/filter hooks to be added for Registrators.
  *
- * @link       https://newseed.se
+ * @link       https://github.com/Maxylan
  * @since      1.0-alpha
  *
  * @package    Tailorer

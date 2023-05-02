@@ -5,7 +5,7 @@ namespace Tailorer\Library\Registrators;
 /**
  * Handles registering Taxonomies for Tailorer.
  *
- * @link       https://newseed.se
+ * @link       https://github.com/Maxylan
  * @since      1.0-alpha
  *
  * @package    Tailorer
@@ -87,7 +87,7 @@ class Taxonomy
     public static function on_term_deletion($term_id, $taxonomy_name): void
     {
         // Gets courses connected to the tax term.
-        $connected_courses = get_posts([
+        $connected_posts = get_posts([
             'numberposts' => -1,
             'fields' => 'ids',
             'tax_query' => [
@@ -99,10 +99,10 @@ class Taxonomy
             ],
         ]);
 
-        foreach ($connected_courses as $connected_course) {
+        foreach ($connected_posts as $post) {
 
             wp_update_post([
-                'ID' => $connected_course,
+                'ID' => $post,
                 'post_status' => 'draft',
             ]);
         }
