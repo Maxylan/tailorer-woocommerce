@@ -1,10 +1,11 @@
-# Write a db service using mariadb:jammy
+version: "3.9"
+# Write a db service using mariadb:focal
 services:
   tailorer.db:
-    image: mariadb:jammy
-    restart: unless_stopped
+    image: mariadb:focal
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_DATABASE: "${DB_NAME}"
       MYSQL_USER: "${DB_USER}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
@@ -18,7 +19,7 @@ services:
     build: # From ./dockerfiles/Dockerfile
       context: .
       dockerfile: ./dockerfiles/Dockerfile
-    restart: unless_stopped
+    restart: unless-stopped
     command: ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
     environment:
       WORDPRESS_DB_HOST: "${DB_HOST}"

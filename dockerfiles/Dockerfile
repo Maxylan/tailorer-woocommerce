@@ -1,11 +1,12 @@
-FROM php:8.1-apache
+FROM php:8.1.18-apache-buster
 
-RUN echo "Europe/Berlin" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
+#RUN echo "Europe/Berlin" > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 ENV APACHE_DOCUMENT_ROOT /var/www/wp
 
 # Install OS utilities and other software
-RUN apt-get upgrade
-RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get update -y
 RUN apt-get -y install \
     dirmngr \ 
     lsb-release \
@@ -28,7 +29,6 @@ RUN apt-get -y install \
     zip \
     unzip \
     wget \
-    vim \
     nano
 
 
@@ -37,15 +37,20 @@ RUN apt-get clean
 RUN apt-get update
 
 # Generate self-signed certificate
-RUN openssl  req -x509 -new -out tailorer-self-signed.crt -keyout tailorer-self-signed.key -days 365 -newkey rsa:4096 -sha256 -nodes << END_SESSION \
-'' \
-'' \
-'' \
-'' \
-'' \
-'dev.tailorer.se' \
-'' \
-END_SESSION
+# RUN openssl req -x509 -new -out tailorer-self-signed.crt -keyout tailorer-self-signed.key -days 365 -newkey rsa:4096 -sha256 -nodes << END_SESSION \
+# '' \
+# '' \
+# '' \
+# '' \
+# '' \
+# 'dev.tailorer.se' \
+# '' \
+# END_SESSION
+# Generate self-signed certificate
+RUN openssl req -x509 -nodes -days 365 \
+    -subj  "/C=CA/ST=QC/O=Company/CN=dev.tailorer.se" \
+    -newkey rsa:4096 -sha256 -keyout /etc/ssl/private/tailorer-self-signed.key \
+    -out /etc/ssl/certs/tailorer-self-signed.crt;
 
 # Copy wp
 COPY ./dockerfiles/wp /var/www/wp

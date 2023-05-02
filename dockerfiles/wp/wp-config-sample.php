@@ -20,16 +20,16 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', getenv('WORDPRESS_DB_NAME') ?: 'database_name_here' );
+define( 'DB_NAME', getenv('WORDPRESS_DB_NAME', true) ?: 'database_name_here' );
 
 /** Database username */
-define( 'DB_USER', getenv('WORDPRESS_DB_USER') ?: 'username_here' );
+define( 'DB_USER', getenv('WORDPRESS_DB_USER', true) ?: 'username_here' );
 
 /** Database password */
-define( 'DB_PASSWORD', getenv('WORDPRESS_DB_PASSWORD') ?: 'password_here' );
+define( 'DB_PASSWORD', getenv('WORDPRESS_DB_PASSWORD', true) ?: 'password_here' );
 
 /** Database hostname */
-define( 'DB_HOST', getenv('WORDPRESS_DB_HOST') ?: 'tailorer.db:3306' );
+define( 'DB_HOST', getenv('WORDPRESS_DB_HOST', true) ?: 'tailorer.db:3306' );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
