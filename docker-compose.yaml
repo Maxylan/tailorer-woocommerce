@@ -1,4 +1,4 @@
-version: "3.9"
+version: "2"
 # Write a db service using mariadb:focal
 services:
   tailorer.db:
