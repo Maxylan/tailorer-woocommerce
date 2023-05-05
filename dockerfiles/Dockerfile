@@ -53,7 +53,8 @@ RUN openssl req -x509 -nodes -days 365 \
     -out /etc/ssl/certs/tailorer-self-signed.crt;
 
 # Copy wp
-COPY ./dockerfiles/wp /var/www/wp
+COPY --chown=root:www-data ./dockerfiles/wp /var/www/wp
+RUN chmod 774 -R /var/www/wp
 
 # Configure Apache2 / httpd
 RUN /usr/sbin/a2enmod rewrite && /usr/sbin/a2enmod headers && /usr/sbin/a2enmod ssl && /usr/sbin/a2enmod expires

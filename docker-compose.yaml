@@ -36,7 +36,6 @@ services:
       WP_NONCE_KEY: "${NONCE_KEY}"
       WP_NONCE_SALT: "${NONCE_SALT}"
     volumes:
-      - wp_data:/var/www/wp
       - ./tailorer:/var/www/wp/wp-content/plugins/tailorer
     ports:
       - 80:80
@@ -48,4 +47,3 @@ networks:
     driver: bridge
 volumes:
   db_data: { driver: local }
-  wp_data: { driver: local }
