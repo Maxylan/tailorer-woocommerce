@@ -1,7 +1,7 @@
-version: "2"
+version: "3"
 # Write a db service using mariadb:focal
 services:
-  tailorer.db:
+  db:
     image: mariadb:focal
     restart: unless-stopped
     environment:
@@ -15,7 +15,7 @@ services:
       - 3306:3306
     networks:
       - tailorer
-  tailorer.wp:
+  wp:
     build: # From ./dockerfiles/Dockerfile
       context: .
       dockerfile: ./dockerfiles/Dockerfile
