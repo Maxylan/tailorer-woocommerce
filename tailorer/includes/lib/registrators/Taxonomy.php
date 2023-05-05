@@ -2,6 +2,8 @@
 
 namespace Tailorer\Library\Registrators;
 
+use Tailorer\Core;
+
 /**
  * Handles registering Taxonomies for Tailorer.
  *
@@ -19,7 +21,7 @@ class Taxonomy
     }
 
     /**
-     * Registers the inheriting Taxonomy during init.
+     * Registers the inheriting Taxonomy, either during init immideatly when plugin is first activated.
      * 
      * @param	array			$args
      * @param	array|string	$object_type
@@ -27,7 +29,7 @@ class Taxonomy
      */
     protected static function register_taxonomy($args = [], array|string $object_type = ''): void
     {
-        add_action('init', function () use ($args, $object_type) {
+        $register = function () use ($args, $object_type) {
             register_taxonomy(
                 static::get_taxonomy_name(),
                 $object_type,
@@ -36,13 +38,15 @@ class Taxonomy
                         'hierarchical' => false,
                         'query_var' => true,
                         'show_admin_column' => true,
-                        'show_ui' => true,
+                        'show_ui' => false,
                     ],
                     $args,
                     ['labels' => static::get_labels($args)]
                 )
             );
-        }, 4);
+        };
+
+        current_action('activate_'.TAILORER_NAME.'/'.TAILORER_NAME.'.php') ? $register(): add_action('init', $register, 2);
     }
 
     /**
@@ -160,7 +164,6 @@ class Taxonomy
     protected static function remove_quick_edit(): void
     {
         add_filter(static::get_taxonomy_name() . '_row_actions', function ($actions) {
-
             unset($actions['inline hide-if-no-js']);
             return $actions;
         }, 10, 1);
@@ -245,27 +248,14 @@ class Taxonomy
      * @param	string $return_type
      * @return	array
      */
-    public static function get_all_terms($args = [], $return_type = 'objects'): array
+    public static function get_all_terms($return_type = 'objects', $args = []): array
     {
-        $terms = [];
-        $terms_data = get_terms(array_merge([
+        $terms = get_terms(array_merge([
             'taxonomy' => static::get_taxonomy_name(),
             'hide_empty' => false,
-            'fields' => 'ids',
+            'fields' => $return_type,
         ], $args));
 
-        if ($return_type === 'objects') {
-
-            $class_name = 'Tailorer\Library\Taxonomies\Terms\\' . static::$term_class_name;
-
-            foreach ($terms_data as $term_data) {
-                $terms[] = new $class_name($term_data);
-            }
-        } else {
-
-            $terms = $terms_data;
-        }
-
-        return $terms;
+        return is_wp_error($terms) ? [] : $terms;
     }
 }

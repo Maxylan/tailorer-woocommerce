@@ -13,6 +13,8 @@
 namespace Tailorer;
 
 use Tailorer\Library\Registrators;
+use Tailorer\Library\Taxonomies;
+use Tailorer\Library\Users;
 
 /**
  * The core plugin class.
@@ -59,15 +61,7 @@ final class Core
      */
     public static function register_routes(): void
     {
-        // Routes\Login::register();
-        // Routes\LostPassword::register();
-        // Routes\ResetPassword::register();
-        // Routes\Register::register();
-        // Routes\Profile::register();
-        // Routes\Settings::register();
-        // Routes\Favourites::register();
-        // Routes\CoursesCompleted::register();
-        // Routes\Diploma::register();
+        // Routes\::register();
     }
 
     /**
@@ -79,15 +73,9 @@ final class Core
      */
     public static function register_taxonomies(): void
     {
-        // Taxonomies\Competence::register();
-        // Taxonomies\Duration::register();
-        // Taxonomies\License::register();
-        // Taxonomies\Organization::register();
-        // Taxonomies\Library::register();
-        // Taxonomies\Municipality::register();
-        // Taxonomies\Region::register();
-        // Taxonomies\ContentType::register();
-        // Taxonomies\TargetAudience::register();
+        Taxonomies\ProductPart::register();
+
+        Users\Roles::register_capabilities();
     }
 
     /**
@@ -99,12 +87,7 @@ final class Core
      */
     public static function register_post_types(): void
     {
-        // PostTypes\Hooks::register_hooks();
-        // PostTypes\Course::register();
-        // PostTypes\InspirationArticle::register();
-        // PostTypes\Resource::register();
-        // PostTypes\Theme::register();
-        // PostTypes\News::register();
+        // PostTypes\::register();
     }
 
     /**
@@ -115,10 +98,7 @@ final class Core
     public static function register_hooks(): void
     {
         Registrators\Hooks::register_hooks();
-        // Roles\Hooks::register_hooks();
-        // Users\Hooks::register_hooks();
-        // Routes\Hooks::register_hooks();
-        // Courses\Hooks::register_hooks();
+        // PostTypes\Hooks::register_hooks();
     }
 
     /**
@@ -127,6 +107,9 @@ final class Core
      * @return  void
      */
     public static function activate(): void {
+        self::log('gets here');
+        add_action('init', Taxonomies\ProductPart::on_activation(), 12, 0);
+        add_action('init', \flush_rewrite_rules(), 99, 0);
     }
 
     /**
@@ -135,7 +118,7 @@ final class Core
      * @return  void
      */
     public static function deactivate(): void {
-        
+        // TODO!
     }
 
     /**
@@ -182,9 +165,46 @@ final class Core
             if (is_array($value) || is_object($value)) {
                 error_log($debug_log_prefix . print_r($value, true));
             }
+            else if (is_bool($value)) {
+                error_log($debug_log_prefix . ($value ? 'true' : 'false'));
+            }
             else {
                 error_log($debug_log_prefix . $value);
             }
         }
+    }
+
+    /**
+     * Returns the path to a view template
+     * 
+     * @return  bool
+     */
+    public static function view(string $template): bool 
+    {
+        $filename = TAILORER_DIR . 'includes/lib/views/template-'.$template.'.php';
+
+        if (file_exists($filename)) {
+            include $filename;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the path to a partial template
+     * 
+     * @return  bool
+     */
+    public static function partial(string $partial): bool 
+    {
+        $filename = TAILORER_DIR . 'includes/lib/views/partials/partial-'.$partial.'.php';
+
+        if (file_exists($filename)) {
+            include $filename;
+            return true;
+        }
+
+        return false;
     }
 }

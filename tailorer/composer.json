@@ -10,6 +10,7 @@
             "Tailorer\\Library\\Admin\\Forms\\": "includes/lib/admin/forms",
             "Tailorer\\Library\\Registrators\\": "includes/lib/registrators",
             "Tailorer\\Library\\Taxonomies\\": "includes/lib/taxonomies",
+            "Tailorer\\Library\\Users\\": "includes/lib/users",
             "Tailorer\\Library\\Options\\": "includes/lib/options",
             "Tailorer\\Library\\Views\\": "includes/lib/views",
             "Tailorer\\Library\\Views\\Partials\\": "includes/lib/views/partials",

@@ -4,11 +4,13 @@ namespace Tailorer\Library\Taxonomies;
 
 use Tailorer\Library\Registrators;
 use Tailorer\Library\PostTypes;
+use Tailorer\Library\Admin;
+use Tailorer\Core;
 
 /**
- * Defines the Region Taxonomy for Tailorer.
+ * Defines the ProductPart Taxonomy for Tailorer.
  *
- * @link       https://newseed.se
+ * @link       https://github.com/Maxylan
  * @since      1.0-alpha
  *
  * @package    Tailorer
@@ -28,25 +30,29 @@ class ProductPart extends Registrators\Taxonomy
     /** Taxonomy Plural Nicename @var string Use getter to access instead of this. */
     public static string $plural_nicename = 'Product Parts';
 
-    /** Taxonomy/Term Classname @var string Use getter to access instead of this. */
-    public static string $term_class_name = Terms\Region::class; // 'Region'
+    /** Taxonomy Plural Nicename @var string Use getter to access instead of this. */
+    public static string $query_var = 'parts';
+
+    public static array $capabilities = [
+        'manage_terms' => 'manage_product_parts',
+        'edit_terms' => 'edit_product_parts',
+        'delete_terms' => 'delete_product_parts',
+        'assign_terms' => 'assign_product_parts',
+    ];
 
     /**
-     * Register the Region Taxonomy
+     * Register the ProductPart Taxonomy
      * @return	void
      */
     public static function register(): void
     {
         parent::register_taxonomy([
-            'query_var' => false,
             'public' => true,
-            'capabilities' => [
-                'manage_terms' => 'manage_product_parts',
-                'edit_terms' => 'edit_product_parts',
-                'delete_terms' => 'delete_product_parts',
-                'assign_terms' => 'assign_product_parts',
-            ],
-        ]);
+            'query_var' => self::$query_var,
+            'capabilities' => self::$capabilities,
+        ], ['product']);
+
+        self::remove_quick_edit();
 
         // Add this to the WooCommerce "Products" menu tab as a submenu
         add_action('admin_menu', function () {
@@ -55,8 +61,38 @@ class ProductPart extends Registrators\Taxonomy
                 self::get_name_plural(),
                 self::get_name_plural(),
                 'manage_product_parts',
-                'edit-tags.php?taxonomy=' . self::get_taxonomy_name() . '&post_type=product'
+                '', [Admin\EditProductParts::class, 'init'], 1
             );
-        });
+        }/*, 99*/);
+    }
+
+    /**
+     * Fires when the plugin is first activated.
+     * Adds the three different types of ProductPart terms to the ProductPart taxonomy.
+     * @return	void
+     */
+    public static function on_activation(): void 
+    {
+        taxonomy_exists(self::get_taxonomy_name()) ?: self::register();
+
+        // Add three terms to the ProductPart taxonomy.
+        if (!term_exists('Types', self::get_taxonomy_name())) {
+            wp_insert_term('Types', self::get_taxonomy_name(), [
+                'description' => 'These are the different types of products that exist, e.g. "Shirt", "Pants", "Jacket", etc.',
+                'slug' => 'types'
+            ]);
+        }
+        if (!term_exists('Fabrics', self::get_taxonomy_name())) {
+            wp_insert_term('Fabrics', self::get_taxonomy_name(), [
+                'description' => 'These are the different types of fabrics that can be used to construct the final product, e.g. "Cotton", "Polyester", "Wool", etc.',
+                'slug' => 'fabrics'
+            ]);
+        }
+        if (!term_exists('Patterns', self::get_taxonomy_name())) {
+            wp_insert_term('Patterns', self::get_taxonomy_name(), [
+                'description' => 'These are the patterns that can be overlayed over the final product, e.g. "Plaid", "Stripes", "Polka Dots", etc.',
+                'slug' => 'patterns'
+            ]);
+        }
     }
 }
