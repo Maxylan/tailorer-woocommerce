@@ -109,25 +109,6 @@ class Taxonomy
     }
 
     /**
-     * Adds this taxonomy as a tab in the wp admin menu.
-     * 
-     * @return	void
-     */
-    protected static function add_to_admin_menu(): void
-    {
-        $calling_taxonomy = static::get_taxonomy_name();
-        add_action('admin_menu', function () use ($calling_taxonomy) {
-            $taxonomy = get_taxonomy($calling_taxonomy);
-            add_users_page(
-                esc_attr($taxonomy->labels->menu_name), //page title
-                esc_attr($taxonomy->labels->menu_name), //menu title
-                $taxonomy->cap->manage_terms,            //capability
-                'edit-tags.php?taxonomy=' . $taxonomy->name //menu slug
-            );
-        });
-    }
-
-    /**
      * Hides the description-field of terms of this taxonomy.
      * 
      * @return	void
