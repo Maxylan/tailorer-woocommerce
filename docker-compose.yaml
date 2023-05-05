@@ -1,8 +1,8 @@
 version: "3"
-# Write a db service using mariadb:focal
+# Database used: mysql:latest (Should be 8.0.33)
 services:
   db:
-    image: mariadb:focal
+    image: mysql:latest
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
@@ -15,8 +15,9 @@ services:
       - 3306:3306
     networks:
       - tailorer
-  wp:
-    build: # From ./dockerfiles/Dockerfile
+# Wordpress Image: php:8.1.18-apache-buster
+  wp: # From ./dockerfiles/Dockerfile
+    build:
       context: .
       dockerfile: ./dockerfiles/Dockerfile
     restart: unless-stopped
@@ -46,5 +47,5 @@ networks:
   tailorer:
     driver: bridge
 volumes:
-  db_data:
-  wp_data:
+  db_data: { driver: local }
+  wp_data: { driver: local }
