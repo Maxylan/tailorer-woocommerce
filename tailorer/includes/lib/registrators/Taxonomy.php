@@ -38,7 +38,7 @@ class Taxonomy
                         'hierarchical' => false,
                         'query_var' => true,
                         'show_admin_column' => true,
-                        'show_ui' => false,
+                        'show_ui' => true,
                     ],
                     $args,
                     ['labels' => static::get_labels($args)]
@@ -165,6 +165,19 @@ class Taxonomy
     {
         add_filter(static::get_taxonomy_name() . '_row_actions', function ($actions) {
             unset($actions['inline hide-if-no-js']);
+            return $actions;
+        }, 10, 1);
+    }
+
+    /**
+     * Removes the option to delete terms of this taxonomy.
+     * 
+     * @return	void
+     */
+    protected static function remove_delete_option(): void
+    {
+        add_filter(static::get_taxonomy_name() . '_row_actions', function ($actions) {
+            unset($actions['delete']);
             return $actions;
         }, 10, 1);
     }

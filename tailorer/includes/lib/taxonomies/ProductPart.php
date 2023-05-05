@@ -50,9 +50,11 @@ class ProductPart extends Registrators\Taxonomy
             'public' => true,
             'query_var' => self::$query_var,
             'capabilities' => self::$capabilities,
+            'show_ui' => false,
         ], ['product']);
 
         self::remove_quick_edit();
+        self::remove_delete_option();
 
         // Add this to the WooCommerce "Products" menu tab as a submenu
         add_action('admin_menu', function () {
