@@ -61,7 +61,8 @@ class ProductPart extends Registrators\Taxonomy
                 self::get_name_plural(),
                 self::get_name_plural(),
                 'manage_product_parts',
-                '', [Admin\EditProductParts::class, 'init'], 1
+                ProductPart::get_taxonomy_name(), 
+                [Admin\EditProductParts::class, 'init'], 1
             );
         }/*, 99*/);
     }
