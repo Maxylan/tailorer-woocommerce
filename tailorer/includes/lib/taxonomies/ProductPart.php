@@ -70,24 +70,39 @@ class ProductPart extends Registrators\Taxonomy
     {
         taxonomy_exists(self::get_taxonomy_name()) ?: self::register();
 
-        // Add three terms to the ProductPart taxonomy.
-        if (!term_exists('Types', self::get_taxonomy_name())) {
-            wp_insert_term('Types', self::get_taxonomy_name(), [
-                'description' => 'These are the different types of products that exist, e.g. "Shirt", "Pants", "Jacket", etc.',
-                'slug' => 'types'
+        /** Add three terms to the ProductPart taxonomy, one for each of the Product Parts. */
+
+        if (!term_exists(PostTypes\Type::get_name_plural(), self::get_taxonomy_name())) {
+            $term = wp_insert_term(PostTypes\Type::get_name_plural(), self::get_taxonomy_name(), [
+                'description' => __('These are the different types of products that exist, e.g. "Shirt", "Pants", "Jacket", etc.', 'tailorer'),
+                'slug' => PostTypes\Type::get_post_type_slug_plural()
             ]);
+
+            if (!is_wp_error($term)) {
+                \set_transient($term['term_id'], self::get_taxonomy_name().'_'.PostTypes\Type::get_post_type_slug_plural().'_term_id');
+            }
         }
-        if (!term_exists('Textiles', self::get_taxonomy_name())) {
-            wp_insert_term('Textiles', self::get_taxonomy_name(), [
-                'description' => 'These are the different types of fabric that can be used to construct the final product, e.g. "Cotton", "Polyester", "Wool", etc.',
-                'slug' => 'textiles'
+
+        if (!term_exists(PostTypes\Fabric::get_name_plural(), self::get_taxonomy_name())) {
+            $term = wp_insert_term(PostTypes\Fabric::get_name_plural(), self::get_taxonomy_name(), [
+                'description' => __('These are the different types of fabric that can be used to construct the final product, e.g. "Cotton", "Polyester", "Wool", etc.', 'tailorer'),
+                'slug' => PostTypes\Fabric::get_post_type_slug_plural()
             ]);
+
+            if (!is_wp_error($term)) {
+                \set_transient($term['term_id'], self::get_taxonomy_name().'_'.PostTypes\Fabric::get_post_type_slug_plural().'_term_id');
+            }
         }
-        if (!term_exists('Patterns', self::get_taxonomy_name())) {
-            wp_insert_term('Patterns', self::get_taxonomy_name(), [
-                'description' => 'These are the patterns that can be overlayed over the final product, e.g. "Plaid", "Stripes", "Polka Dots", etc.',
-                'slug' => 'patterns'
+
+        if (!term_exists(PostTypes\Pattern::get_name_plural(), self::get_taxonomy_name())) {
+            $term = wp_insert_term(PostTypes\Pattern::get_name_plural(), self::get_taxonomy_name(), [
+                'description' => __('These are the patterns that can be overlayed over the final product, e.g. "Plaid", "Stripes", "Polka Dots", etc.', 'tailorer'),
+                'slug' => PostTypes\Pattern::get_post_type_slug_plural()
             ]);
+
+            if (!is_wp_error($term)) {
+                \set_transient($term['term_id'], self::get_taxonomy_name().'_'.PostTypes\Pattern::get_post_type_slug_plural().'_term_id');
+            }
         }
     }
 }

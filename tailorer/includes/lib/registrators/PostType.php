@@ -2,6 +2,9 @@
 
 namespace Tailorer\Library\Registrators;
 
+use Tailorer\Core;
+use Tailorer\Library\Taxonomies;
+
 /**
  * Handles registering Custom Post Types for Tailorer.
  *
@@ -30,7 +33,7 @@ class PostType
             $result = \register_post_type(
                 self::get_post_type_name(),
                 array_merge([
-                    'capability_type' => 'page',
+                    'capability_type' => 'post',
                     'description' => '',
                     'has_archive' => true,
                     'hierarchical' => false,
@@ -83,6 +86,23 @@ class PostType
         }
 
         return $labels;
+    }
+
+    /**
+     * Removes the option to quick-edit posts of this type.
+     * 
+     * @return	void
+     * @since	1.0.0
+     */
+    protected static function remove_quick_edit(): void
+    {
+        add_filter('post_row_actions', function ($actions) {
+            if (static::is_listing()) {
+                unset($actions['inline hide-if-no-js']);
+            }
+
+            return $actions;
+        }, 10, 1);
     }
 
     /**
@@ -146,28 +166,11 @@ class PostType
     }
 
     /**
-     * Removes the option to quick-edit posts of this type.
-     * 
-     * @return	void
-     * @since	1.0.0
-     */
-    public static function remove_quick_edit(): void
-    {
-        add_filter('post_row_actions', function ($actions) {
-            if (static::is_listing_my_post_type()) {
-                unset($actions['inline hide-if-no-js']);
-            }
-
-            return $actions;
-        }, 10, 1);
-    }
-
-    /**
      * Determines wether or not your current screen is the edit screen for 
      * posts of the custom post type.
      * @return	bool
      */
-    public static function is_listing_my_post_type(): bool
+    public static function is_listing(): bool
     {
         $current_screen = get_current_screen();
         return ($current_screen->base === 'edit' &&
@@ -180,7 +183,7 @@ class PostType
      * Determines wether or not your current screen is the listing screen for posts of the custom post type
      * @return	bool
      */
-    public static function is_editing_my_post_type(): bool
+    public static function is_editing(): bool
     {
         $current_screen = get_current_screen();
 
@@ -188,5 +191,24 @@ class PostType
             isset($current_screen->post_type) &&
             $current_screen->post_type === static::get_post_type_name()
         );
+    }
+
+    public static function get_part_term(string $return_type = T_NUM_STRING): \WP_Term|string|null 
+    {
+        $term = get_transient(Taxonomies\ProductPart::get_taxonomy_name().'_'.static::get_post_type_slug_plural());
+
+        if (empty($term)) {
+            return null;
+        }
+        
+        if ($return_type === T_NUM_STRING) {
+            return $term;
+        } else if ($return_type === OBJECT) {
+            $term = get_term_by('id', $term, Taxonomies\ProductPart::get_taxonomy_name());
+            return empty($term) ? null : $term;
+        } else {
+            Core::log('Invalid return type for '.__METHOD__.'()');
+            return null;
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tailorer\Library\PostTypes;
 
+use Tailorer\Core;
 use Tailorer\Library\Registrators;
 use Tailorer\Library\Taxonomies;
 
@@ -14,7 +15,7 @@ use Tailorer\Library\Taxonomies;
  * @package    Tailorer
  * @subpackage Tailorer/Library/PostTypes
  */
-class Type extends Registrators\PostType
+class Type extends Registrators\PostType implements IPost
 {
     /** Custom Post Type Singular Slug @var string Use getter to access. */
     protected static string $singular_cptslug = 'type';
@@ -75,4 +76,50 @@ class Type extends Registrators\PostType
 
         self::remove_quick_edit();
     }
+
+    /**
+     * Create an instance of the "Type" post type.
+     * @throws  \LogicException|\Exception If no post or an invalid post is provided.
+     * @return	Type
+     */
+    public function __construct(Type|\WP_Post|string|int $post = null) {
+        if (empty($post)) {
+            throw new \LogicException('No post provided.');
+        }
+        
+        if ($post instanceof Type) {
+            // $post = $post->get_post();
+        }
+        else if (is_numeric($post) || ($post instanceof \WP_Post && $post->post_type === self::get_post_type_name())) {
+            $post = \get_post($post);
+        } 
+        else {
+            // Get post by slug or title.
+            $posts = get_posts([ 
+                'name' => $post,
+                'post_type' => self::get_post_type_name(),
+                'post_status' => 'publish',
+                'numberposts' => 1
+            ]);
+            
+            if (empty($posts)) {
+                throw new \Exception(
+                    'Failed to initialize "'.self::get_name().'" '. (
+                        is_string($post) ? 'with value "'.$post.'"' : (
+                            Core::debug() ? 'with object "'.print_r($post, true).'"' : 'with "'.get_class($post).'" instance.'
+                        )
+                    )
+                );
+            }
+
+            $post = $posts[0];
+            unset($posts);
+        }
+            
+        if (empty($post)) {
+            throw new \LogicException('Product Part: "'.self::get_name().'" was passed an invalid post parameter. '. $post);
+        }
+    }
 }
+
+\class_alias(Type::class, 'T_Type');

@@ -26,6 +26,22 @@ final class Hooks
      */
     public static function register_hooks(): void
     {
+        // Assigns each custom post type its respective class
+        add_filter( 'register_post_type_args', function ( $args, $post_type ) {
+            switch($post_type) {
+                case Type::get_post_type_name(): 
+                    $args['class'] = Type::class;
+                    break;
+                case Fabric::get_post_type_name(): 
+                    $args['class'] = Fabric::class;
+                    break;
+                case Pattern::get_post_type_name(): 
+                    $args['class'] = Pattern::class;
+                    break;
+            };
+            return $args;
+        }, 10, 2 );
+
         // Set what editor will be used for different post types. true = Gutenberg, false = Classic Wysiwyg.
         add_filter( 'use_block_editor_for_post_type', function ( $use_block_editor, $post_type ) 
         {
