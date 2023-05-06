@@ -31,8 +31,8 @@ final class Hooks
         {
             return match($post_type) {
                 Type::get_post_type_name() => false,
-                Type::get_post_type_name() => false,
-                Type::get_post_type_name() => false,
+                Fabric::get_post_type_name() => false,
+                Pattern::get_post_type_name() => false,
                 default => $use_block_editor
             };
         }, 12, 2 );
