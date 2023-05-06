@@ -19,6 +19,7 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
+    require ABSPATH.'wp-load.php'; // This is mainly for my IDE to be able to recognize and autocomplete WP-functions.
 	die;
 }
 

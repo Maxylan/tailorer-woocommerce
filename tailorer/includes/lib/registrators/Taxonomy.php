@@ -61,7 +61,7 @@ class Taxonomy
         $labels = [
             'name'              => static::get_name_plural(),
             'singular_name'     => static::get_name(),
-            'search_items'      => __('Search', 'tailorer') . ' ' . static::get_name_plural(),
+            'search_items'      => __('Find', 'tailorer') . ' ' . static::get_name_plural(),
             'all_items'         => __('All', 'tailorer') . ' ' . static::get_name_plural(),
             'parent_item'       => __('Parent-', 'tailorer') . ' ' . static::get_name(),
             'parent_item_colon' => __('Parent-', 'tailorer') . ' ' . static::get_name() . ':',
@@ -78,58 +78,6 @@ class Taxonomy
         }
 
         return $labels;
-    }
-
-    /**
-     * Marks all posts labled with the deleted term as Drafts.
-     * 
-     * @hook    pre_delete_term
-     * @param	$term_id
-     * @param	$taxonomy_name
-     * @return	void
-     */
-    public static function on_term_deletion($term_id, $taxonomy_name): void
-    {
-        // Gets courses connected to the tax term.
-        $connected_posts = get_posts([
-            'numberposts' => -1,
-            'fields' => 'ids',
-            'tax_query' => [
-                [
-                    'taxonomy' => $taxonomy_name,
-                    'field' => 'term_id',
-                    'terms' => [$term_id],
-                ],
-            ],
-        ]);
-
-        foreach ($connected_posts as $post) {
-
-            wp_update_post([
-                'ID' => $post,
-                'post_status' => 'draft',
-            ]);
-        }
-    }
-
-    /**
-     * Hides the description-field of terms of this taxonomy.
-     * 
-     * @return	void
-     */
-    protected static function hide_description_field(): void
-    {
-        add_action('load-edit-tags.php', function () {
-            if (self::current_admin_screen_belongs_to_taxonomy()) {
-                $css = '<style>
-              .term-description-wrap {
-                display:none;
-              }
-              </style>';
-
-                echo $css;
-            }
-        });
     }
 
     /**

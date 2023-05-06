@@ -14,6 +14,8 @@ namespace Tailorer;
 
 use Tailorer\Library\Registrators;
 use Tailorer\Library\Taxonomies;
+use Tailorer\Library\PostTypes;
+use Tailorer\Library\Admin;
 use Tailorer\Library\Users;
 
 /**
@@ -74,7 +76,6 @@ final class Core
     public static function register_taxonomies(): void
     {
         Taxonomies\ProductPart::register();
-
         Users\Roles::register_capabilities();
     }
 
@@ -87,7 +88,7 @@ final class Core
      */
     public static function register_post_types(): void
     {
-        // PostTypes\::register();
+        PostTypes\Type::register();
     }
 
     /**
@@ -97,8 +98,7 @@ final class Core
      */
     public static function register_hooks(): void
     {
-        Registrators\Hooks::register_hooks();
-        // PostTypes\Hooks::register_hooks();
+        Admin\Hooks::register_hooks();
     }
 
     /**
@@ -107,9 +107,8 @@ final class Core
      * @return  void
      */
     public static function activate(): void {
-        self::log('gets here');
-        add_action('init', Taxonomies\ProductPart::on_activation(), 12, 0);
-        add_action('init', \flush_rewrite_rules(), 99, 0);
+        Taxonomies\ProductPart::on_activation();
+        \flush_rewrite_rules();
     }
 
     /**

@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
  * @since      1.0-alpha
  *
  * @package    Tailorer
- * @subpackage Tailorer/Library/Taxonomies
+ * @subpackage Tailorer/Library/Admin
  */
 final class EditProductParts
 {

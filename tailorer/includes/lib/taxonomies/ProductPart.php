@@ -51,22 +51,14 @@ class ProductPart extends Registrators\Taxonomy
             'query_var' => self::$query_var,
             'capabilities' => self::$capabilities,
             'show_ui' => false,
+            'labels' => [
+                'name'         => static::get_name(),
+                'search_items' => __('Find', 'tailorer') . ' ' . static::get_name(),
+            ]
         ], ['product']);
 
         self::remove_quick_edit();
         self::remove_delete_option();
-
-        // Add this to the WooCommerce "Products" menu tab as a submenu
-        add_action('admin_menu', function () {
-            add_submenu_page(
-                'edit.php?post_type=product',
-                self::get_name_plural(),
-                self::get_name_plural(),
-                'manage_product_parts',
-                ProductPart::get_taxonomy_name(), 
-                [Admin\EditProductParts::class, 'init'], 1
-            );
-        }/*, 99*/);
     }
 
     /**
