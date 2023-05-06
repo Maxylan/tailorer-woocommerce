@@ -89,6 +89,8 @@ final class Core
     public static function register_post_types(): void
     {
         PostTypes\Type::register();
+        PostTypes\Fabric::register();
+        PostTypes\Pattern::register();
     }
 
     /**

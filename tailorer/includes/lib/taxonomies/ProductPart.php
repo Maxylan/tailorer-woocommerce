@@ -77,10 +77,10 @@ class ProductPart extends Registrators\Taxonomy
                 'slug' => 'types'
             ]);
         }
-        if (!term_exists('Fabrics', self::get_taxonomy_name())) {
-            wp_insert_term('Fabrics', self::get_taxonomy_name(), [
-                'description' => 'These are the different types of fabrics that can be used to construct the final product, e.g. "Cotton", "Polyester", "Wool", etc.',
-                'slug' => 'fabrics'
+        if (!term_exists('Textiles', self::get_taxonomy_name())) {
+            wp_insert_term('Textiles', self::get_taxonomy_name(), [
+                'description' => 'These are the different types of fabric that can be used to construct the final product, e.g. "Cotton", "Polyester", "Wool", etc.',
+                'slug' => 'textiles'
             ]);
         }
         if (!term_exists('Patterns', self::get_taxonomy_name())) {

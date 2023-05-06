@@ -34,7 +34,7 @@ final class Menu
             Taxonomies\ProductPart::$capabilities['manage_terms'], 
             'edit.php?page='.Taxonomies\ProductPart::get_taxonomy_name_plural(),
             [Menu::class, 'product_parts_toplevel_menu_callback'],
-            'dashicons-image-filter', 2
+            'dashicons-image-filter', 56
         );
     }
 

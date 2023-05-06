@@ -71,7 +71,7 @@ class PostType
             'edit_item'     => __('Edit', 'tailorer') . ' ' . self::get_name(),
             'view_item'     => __('View', 'tailorer') . ' ' . self::get_name(),
             'all_items'     => __('All', 'tailorer') . ' ' . strtolower(self::get_name_plural()),
-            'search_items'     => __('Search', 'tailorer') . ' ' . strtolower(self::get_name_plural()),
+            'search_items'     => __('Find', 'tailorer') . ' ' . strtolower(self::get_name_plural()),
             'parent_item_colon' => __('Parent', 'tailorer') . ' ' . self::get_name_plural() . ':',
             'not_found'     => __('No', 'tailorer') . ' ' . self::get_name_plural() . ' ' . __('was found.', 'tailorer'),
             'not_found_in_trash' => __('No', 'tailorer') . ' ' . self::get_name_plural() . ' ' . __('could be found in the trash.', 'tailorer'),
