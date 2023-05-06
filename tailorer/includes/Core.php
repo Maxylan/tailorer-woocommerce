@@ -98,6 +98,7 @@ final class Core
      */
     public static function register_hooks(): void
     {
+        PostTypes\Hooks::register_hooks();
         Admin\Hooks::register_hooks();
     }
 

@@ -49,6 +49,7 @@ class Type extends Registrators\PostType
             'menu_title' => self::get_name_plural(),
             'show_in_rest' => true,
             'public' => true,
+            'supports' => [],
             'taxonomies' => [
                 Taxonomies\ProductPart::get_taxonomy_name(),
                 'product_cat',
@@ -70,5 +71,7 @@ class Type extends Registrators\PostType
                 'not_found_in_trash' => __('No product', 'tailorer') . ' ' . strtolower(self::get_name_plural()) . ' ' . __('could be found in the trash.', 'tailorer'),
             ]
         ]);
+
+        self::remove_quick_edit();
     }
 }

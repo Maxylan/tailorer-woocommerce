@@ -39,7 +39,12 @@ class PostType
                     'query_var' => true,
                     'show_in_menu' => true,
                     'show_ui' => true,
-                    'supports' => ['title'],
+                    'supports' => [
+                        'title', 
+                        'thumbnail', 
+                        'excerpt', 
+                        'editor'
+                    ]
                 ], $args, ['labels' => self::get_labels($args)])
             );
         });

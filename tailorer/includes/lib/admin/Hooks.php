@@ -21,7 +21,6 @@ final class Hooks
     /**
      * Registers/Adds all action/filter hooks associated with the admin-area.
      * @return  void
-     * @since   1.0.0
      */
     public static function register_hooks(): void
     {
@@ -30,6 +29,6 @@ final class Hooks
 
         // Add Product Part terms to the WooCommerce "Products" menu tab as a submenu
         add_action('admin_menu', [Menu::class, 'manage_product_part_terms_submenu'], 10, 3);
-
+        
     }
 }
