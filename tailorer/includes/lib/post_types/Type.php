@@ -60,14 +60,15 @@ class Type extends Registrators\PostType
                 'with_front' => false,
             ],
             'labels' => [
-                'name'             => __('Product', 'tailorer') . ' ' . self::get_name_plural(),
+                'name'            => __('Product', 'tailorer') . ' ' . self::get_name_plural(),
                 'add_new'         => __('Create new product', 'tailorer') . ' ' .  strtolower(self::get_name()),
-                'new_item'         => __('New product', 'tailorer') . ' ' . strtolower(self::get_name()),
-                'edit_item'     => __('Edit product', 'tailorer') . ' ' . strtolower(self::get_name()),
-                'view_item'     => __('View product', 'tailorer') . ' ' . strtolower(self::get_name()),
-                'all_items'     => __('Product', 'tailorer') . ' ' . self::get_name_plural(),
-                'search_items'     => __('Find', 'tailorer') . ' ' . self::get_name_plural(),
-                'not_found'     => __('No product', 'tailorer') . ' ' . strtolower(self::get_name_plural()) . ' ' . __('could be found.', 'tailorer'),
+                'add_new_item'    => __('Create Product', 'tailorer') . ' ' .  self::get_name(),
+                'new_item'        => __('New product', 'tailorer') . ' ' . strtolower(self::get_name()),
+                'edit_item'       => __('Edit product', 'tailorer') . ' ' . strtolower(self::get_name()),
+                'view_item'       => __('View product', 'tailorer') . ' ' . strtolower(self::get_name()),
+                'all_items'       => __('Product', 'tailorer') . ' ' . self::get_name_plural(),
+                'search_items'    => __('Find', 'tailorer') . ' ' . self::get_name_plural(),
+                'not_found'       => __('No product', 'tailorer') . ' ' . strtolower(self::get_name_plural()) . ' ' . __('could be found.', 'tailorer'),
                 'not_found_in_trash' => __('No product', 'tailorer') . ' ' . strtolower(self::get_name_plural()) . ' ' . __('could be found in the trash.', 'tailorer'),
             ]
         ]);
