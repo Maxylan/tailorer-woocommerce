@@ -21,9 +21,9 @@ use Tailorer\Library\Users;
 /**
  * The core plugin class.
  *
- * This is the springboard from where hooks, cpt's are registered and helper 
- * functions available throughout the plugin are defined, effectively 
- * starting execution.
+ * This is the springboard from where hooks are added, cpt's are registered 
+ * and helper functions available throughout the plugin are defined, 
+ * effectively starting plugin execution.
  *
  * @since      1.0-alpha
  * @package    Tailorer
