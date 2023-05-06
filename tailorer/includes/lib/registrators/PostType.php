@@ -154,7 +154,7 @@ class PostType
     public static function remove_quick_edit(): void
     {
         add_filter('post_row_actions', function ($actions) {
-            if (static::is_editing_my_post_type()) {
+            if (static::is_listing_my_post_type()) {
                 unset($actions['inline hide-if-no-js']);
             }
 
@@ -167,7 +167,7 @@ class PostType
      * posts of the custom post type.
      * @return	bool
      */
-    public static function is_editing_my_post_type(): bool
+    public static function is_listing_my_post_type(): bool
     {
         $current_screen = get_current_screen();
         return ($current_screen->base === 'edit' &&
@@ -180,7 +180,7 @@ class PostType
      * Determines wether or not your current screen is the listing screen for posts of the custom post type
      * @return	bool
      */
-    public static function is_listing_my_post_type(): bool
+    public static function is_editing_my_post_type(): bool
     {
         $current_screen = get_current_screen();
 
