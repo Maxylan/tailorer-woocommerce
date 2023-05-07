@@ -65,7 +65,7 @@ class Taxonomy
             'all_items'         => __('All', 'tailorer') . ' ' . static::get_name_plural(),
             'parent_item'       => __('Parent-', 'tailorer') . ' ' . static::get_name(),
             'parent_item_colon' => __('Parent-', 'tailorer') . ' ' . static::get_name() . ':',
-            'edit_item'         => __('Edit', 'tailorer') . ' ' . static::get_name(),
+            'edit_item'         => __('Edit', 'tailorer') . ' "' . static::get_name() . '" ' . __('term.', 'tailorer'),
             'update_item'       => __('Update', 'tailorer') . ' ' . static::get_name(),
             'add_new_item'      => __('Add', 'tailorer') . ' ' . static::get_name(),
             'new_item_name'     => __('New', 'tailorer') . ' ' . static::get_name() . ' ' . __('name', 'tailorer'),

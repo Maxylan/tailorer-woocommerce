@@ -50,7 +50,8 @@ class ProductPart extends Registrators\Taxonomy
             'public' => true,
             'query_var' => self::$query_var,
             'capabilities' => self::$capabilities,
-            'show_ui' => false,
+            'show_in_menu' => false,
+            'show_ui' => true,
             'labels' => [
                 'name'         => static::get_name(),
                 'search_items' => __('Find', 'tailorer') . ' ' . static::get_name(),
@@ -59,6 +60,18 @@ class ProductPart extends Registrators\Taxonomy
 
         self::remove_quick_edit();
         self::remove_delete_option();
+    }
+
+    public static function get_associated_post_type(\WP_Term|string $part): string|false
+    {
+        $slug = is_object($part) ? $part->slug : $part;
+
+        return match($slug) {
+            PostTypes\Type::get_post_type_slug_plural() => PostTypes\Type::get_post_type_name(),
+            PostTypes\Fabric::get_post_type_slug_plural() => PostTypes\Fabric::get_post_type_name(),
+            PostTypes\Pattern::get_post_type_slug_plural() => PostTypes\Pattern::get_post_type_name(),
+            default => false
+        };
     }
 
     /**
