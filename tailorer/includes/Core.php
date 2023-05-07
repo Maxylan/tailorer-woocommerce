@@ -157,13 +157,13 @@ final class Core
 
         $debug_log_prefix = __('- Tailorer:', 'tailorer').' ';
 
-        if ($var_dump) {
+        if ($var_dump || is_null($value)) {
             ob_start();
             var_dump($value);
             $value = ob_get_clean();
             error_log($debug_log_prefix . $value);
         }
-        else if (!empty($value)) {
+        else {
             if (is_array($value) || is_object($value)) {
                 error_log($debug_log_prefix . print_r($value, true));
             }
@@ -181,13 +181,12 @@ final class Core
      * 
      * @return  bool
      */
-    public static function view(string $template): bool 
+    public static function view(string $template): string|false 
     {
-        $filename = TAILORER_DIR . 'includes/lib/views/template-'.$template.'.php';
+        $filename = \apply_filters('tailorer_template_filepath', TAILORER_DIR . 'includes/lib/views/template-'.$template.'.php', $template);
 
         if (file_exists($filename)) {
-            include $filename;
-            return true;
+            return $filename;
         }
 
         return false;
@@ -198,13 +197,12 @@ final class Core
      * 
      * @return  bool
      */
-    public static function partial(string $partial): bool 
+    public static function partial(string $partial): string|false 
     {
-        $filename = TAILORER_DIR . 'includes/lib/views/partials/partial-'.$partial.'.php';
+        $filename = \apply_filters('tailorer_partial_filepath', TAILORER_DIR . 'includes/lib/views/partials/partial-'.$partial.'.php', $partial);
 
         if (file_exists($filename)) {
-            include $filename;
-            return true;
+            return $filename;
         }
 
         return false;

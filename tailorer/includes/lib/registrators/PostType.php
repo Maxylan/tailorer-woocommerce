@@ -16,6 +16,9 @@ use Tailorer\Library\Taxonomies;
  */
 class PostType
 {
+    /** Cache the associated Product Part term ID. */
+    protected int $term_id = 0;
+
     /** Prevent instantiating objects of this class. @since	1.0.0 */
     private function __construct()
     {
@@ -193,18 +196,19 @@ class PostType
         );
     }
 
-    public static function get_part_term(string $return_type = T_NUM_STRING): \WP_Term|string|null 
+    public static function get_part_term(string $return_type = 'id'): \WP_Term|int|null 
     {
-        $term = get_transient(Taxonomies\ProductPart::get_taxonomy_name().'_'.static::get_post_type_slug_plural());
-
-        if (empty($term)) {
+        $return_type = strtolower($return_type);
+        static::$term_id = static::$term_id ?: (int) get_transient(Taxonomies\ProductPart::get_taxonomy_name().'_'.static::get_post_type_slug_plural().'_term_id');
+        Core::log(static::$term_id);
+        if (empty(static::$term_id)) {
             return null;
         }
         
-        if ($return_type === T_NUM_STRING) {
-            return $term;
-        } else if ($return_type === OBJECT) {
-            $term = get_term_by('id', $term, Taxonomies\ProductPart::get_taxonomy_name());
+        if ($return_type === 'id') {
+            return static::$term_id;
+        } else if ($return_type === 'object') {
+            $term = get_term_by('id', static::$term_id, Taxonomies\ProductPart::get_taxonomy_name());
             return empty($term) ? null : $term;
         } else {
             Core::log('Invalid return type for '.__METHOD__.'()');

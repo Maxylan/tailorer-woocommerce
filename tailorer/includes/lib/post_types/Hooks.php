@@ -53,6 +53,9 @@ final class Hooks
             };
         }, 12, 2 );
 
+        // Automatically assign a "product_part" term to our three Custom Post Types that are related to Product Parts upon creation.
+        add_action('wp_insert_post', [Functions::class, 'assign_product_part_term'], 10, 3);
+
         // Automatically draft all WooCommerce products that has a relation to the Custom Post Type that was deleted.
         add_action('before_delete_post', [Products\Functions::class, 'draft_attached_products'], 10, 1); // TODO!
     }

@@ -30,7 +30,7 @@ class ProductPart extends Registrators\Taxonomy
     /** Taxonomy Plural Nicename @var string Use getter to access instead of this. */
     public static string $plural_nicename = 'Product Parts';
 
-    /** Taxonomy Plural Nicename @var string Use getter to access instead of this. */
+    /** Taxonomy query-var @var string Use getter to access instead of this. */
     public static string $query_var = 'parts';
 
     public static array $capabilities = [
@@ -60,6 +60,15 @@ class ProductPart extends Registrators\Taxonomy
 
         self::remove_quick_edit();
         self::remove_delete_option();
+
+        // Filter the names of the three pre-defined terms of this taxonomy to be displayed
+        // as singular instead of plural.
+        \add_filter('post_column_taxonomy_links', function ($term_links, $taxonomy, $terms) {
+            if ($taxonomy == self::get_taxonomy_name()) {
+                $term_links = array_map(fn ($l) => preg_replace('/^.*>('.PostTypes\Type::get_name().'|'.PostTypes\Fabric::get_name().'|'.PostTypes\Pattern::get_name().').*$/', '$1', $l), $term_links);
+            }
+            return $term_links;
+        }, 10, 3);
     }
 
     public static function get_associated_post_type(\WP_Term|string $part): string|false
@@ -81,6 +90,7 @@ class ProductPart extends Registrators\Taxonomy
      */
     public static function on_activation(): void 
     {
+        global $wpdb;
         taxonomy_exists(self::get_taxonomy_name()) ?: self::register();
 
         /** Add three terms to the ProductPart taxonomy, one for each of the Product Parts. */
@@ -90,10 +100,13 @@ class ProductPart extends Registrators\Taxonomy
                 'description' => __('These are the different types of products that exist, e.g. "Shirt", "Pants", "Jacket", etc.', 'tailorer'),
                 'slug' => PostTypes\Type::get_post_type_slug_plural()
             ]);
+        }
+        else {
+            $term = get_term_by('name', PostTypes\Type::get_name_plural(), self::get_taxonomy_name(), ARRAY_A);
+        }
 
-            if (!is_wp_error($term)) {
-                \set_transient($term['term_id'], self::get_taxonomy_name().'_'.PostTypes\Type::get_post_type_slug_plural().'_term_id');
-            }
+        if (!empty($term) && !is_wp_error($term)) {
+            \set_transient(self::get_taxonomy_name().'_'.PostTypes\Type::get_post_type_slug_plural().'_term_id', (int) $term['term_id']);
         }
 
         if (!term_exists(PostTypes\Fabric::get_name_plural(), self::get_taxonomy_name())) {
@@ -101,10 +114,13 @@ class ProductPart extends Registrators\Taxonomy
                 'description' => __('These are the different types of fabric that can be used to construct the final product, e.g. "Cotton", "Polyester", "Wool", etc.', 'tailorer'),
                 'slug' => PostTypes\Fabric::get_post_type_slug_plural()
             ]);
+        }
+        else {
+            $term = get_term_by('name', PostTypes\Fabric::get_name_plural(), self::get_taxonomy_name(), ARRAY_A);
+        }
 
-            if (!is_wp_error($term)) {
-                \set_transient($term['term_id'], self::get_taxonomy_name().'_'.PostTypes\Fabric::get_post_type_slug_plural().'_term_id');
-            }
+        if (!empty($term) && !is_wp_error($term)) {
+            \set_transient(self::get_taxonomy_name().'_'.PostTypes\Fabric::get_post_type_slug_plural().'_term_id', (int) $term['term_id']);
         }
 
         if (!term_exists(PostTypes\Pattern::get_name_plural(), self::get_taxonomy_name())) {
@@ -112,10 +128,13 @@ class ProductPart extends Registrators\Taxonomy
                 'description' => __('These are the patterns that can be overlayed over the final product, e.g. "Plaid", "Stripes", "Polka Dots", etc.', 'tailorer'),
                 'slug' => PostTypes\Pattern::get_post_type_slug_plural()
             ]);
+        }
+        else {
+            $term = get_term_by('name', PostTypes\Pattern::get_name_plural(), self::get_taxonomy_name(), ARRAY_A);
+        }
 
-            if (!is_wp_error($term)) {
-                \set_transient($term['term_id'], self::get_taxonomy_name().'_'.PostTypes\Pattern::get_post_type_slug_plural().'_term_id');
-            }
+        if (!empty($term) && !is_wp_error($term)) {
+            \set_transient(self::get_taxonomy_name().'_'.PostTypes\Pattern::get_post_type_slug_plural().'_term_id', (int) $term['term_id']);
         }
     }
 }

@@ -93,6 +93,6 @@ final class EditProductParts
             self::init();
         }
 
-        Core::view('edit-product-parts');
+        include Core::view('edit-product-parts') ?: \get_theme_file_path('index.php');
     }
 }

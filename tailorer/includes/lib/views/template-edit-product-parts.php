@@ -18,12 +18,10 @@ if (!defined('ABSPATH')) {
         </thead>
 
         <tbody id="the-list" data-wp-lists="list:tag">
-            <?php global $part;
-            foreach(EditProductParts::$parts as $product_part) {
-                $part = $product_part;
-                include Core::partial('product-part-row');
+            <?php
+            foreach(EditProductParts::$parts as $part) {
+                include Core::partial('product-part-row') ?: \get_theme_file_path('index.php');
             }
-            unset($part);
             ?>
         </tbody>
 

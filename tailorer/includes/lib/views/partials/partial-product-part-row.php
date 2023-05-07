@@ -8,12 +8,10 @@ use Tailorer\Library\Admin\EditProductParts;
 if (!defined('ABSPATH')) {
     die();
 }
-
-global $part;
 ?>
 
 <tr id="tag-<?= $part->term_id; ?>" class="level-0">
-    <td class="name column-name has-row-actions column-primary" data-colname="Name"><strong><a class="row-title" href="<?= \admin_url('edit.php?post_type='.Taxonomies\ProductPart::get_associated_post_type($part) ?: 'product') ?>" aria-label="“<?= \esc_html($part->name); ?>” (Edit)"><?= $part->name; ?></a></strong><br>
+    <td <?php echo empty(EditProductParts::$posts[$part->term_id]) ? '' : 'style="cursor: pointer;"' ?> class="name column-name has-row-actions column-primary" data-colname="Name"><strong><a class="row-title" href="<?= \admin_url('edit.php?post_type='.Taxonomies\ProductPart::get_associated_post_type($part) ?: 'product') ?>" aria-label="“<?= \esc_html($part->name); ?>” (Edit)"><?= $part->name; ?></a></strong><br>
         <?php // Row Actions
         $actions = [];
         foreach(EditProductParts::$row_actions as $action) 
@@ -28,12 +26,15 @@ global $part;
             $actions[] = \apply_filters("tailorer_edit_product_parts_row_action_{$action}", $html, $part);
         }
         
-        echo '<div class="row-actions">' . implode(' | ', $actions) . '</div>';
+        echo '<div class="row-actions"><div style="margin-bottom:1em;">' . implode(' | ', $actions) . '</div>'.(empty(EditProductParts::$posts[$part->term_id]) ? 'No '.$part->slug.' exist yet.<br><a href="'.\admin_url('edit.php?post_type='.Taxonomies\ProductPart::get_associated_post_type($part) ?: 'product').'" aria-label="Create “'.$part->name.'”">Create one here!<a>' : '<span class="dashicons dashicons-arrow-down-alt2"></span>').'</div>';
         ?>
     </td>
     <td class="description column-description" data-colname="Description">
-        <p><?= \esc_html($part->name); ?></p>
+        <p><?= \esc_html($part->description); ?></p>
     </td>
     <td class="slug column-slug" data-colname="Slug"><?= $part->slug; ?></td>
     <td class="posts column-posts" data-colname="Count"><a href="<?= \admin_url('edit.php?post_type='.Taxonomies\ProductPart::get_associated_post_type($part) ?: 'product'); ?>"><?= count(EditProductParts::$posts[$part->term_id]); ?></a></td>
+    <div>
+    
+    </div>
 </tr>
