@@ -200,7 +200,7 @@ class PostType
     {
         $return_type = strtolower($return_type);
         static::$term_id = static::$term_id ?: (int) get_transient(Taxonomies\ProductPart::get_taxonomy_name().'_'.static::get_post_type_slug_plural().'_term_id');
-        Core::log(static::$term_id);
+        
         if (empty(static::$term_id)) {
             return null;
         }
